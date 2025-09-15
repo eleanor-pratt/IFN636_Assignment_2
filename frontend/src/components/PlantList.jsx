@@ -15,26 +15,42 @@ const PlantList = ({ plants, setPlants, setEditingPlant }) => {
     }
   };
 
+  const handleAddBasketItem = async (plantId) => {
+    try {
+      await axiosInstance.post(`/api/basketItem`, {plant: plantId, quantity: 1}, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+    } catch (error) {
+      alert('Failed to add plant to basket.');
+    }
+  };
+
   return (
     <div>
       {plants.map((plant) => (
-        <div key={plant._id} className="bg-stone-100 p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-lg font-bold">{plant.commonName}</h2>
+        <div key={plant._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
+          <h2 className="text-lg font-bold text-[#2E6D17]">{plant.commonName}</h2>
           <p className="text text-gray-500 italic">{plant.botanicalName}</p>
           <p className="text">{plant.description}</p>
           <p className="text">Stock Count: {plant.stockCount}</p>
-          <div className="mt-2">
+          <div className="flex gap-x-2">
             <button
               onClick={() => setEditingPlant(plant)}
-              className="w-20 mr-2 bg-stone-500 text-white px-4 py-2 rounded hover:bg-lime-700"
+              className="bg-[#75b550] px-4 py-2 hover:bg-[#ffff00] rounded-[30px] gap-4"
             >
               Edit
             </button>
             <button
               onClick={() => handleDelete(plant._id)}
-              className="w-20 bg-pink-700 text-white px-4 py-2 rounded hover:bg-lime-700"
+              className="bg-[#ff4e50] px-4 py-2 hover:bg-[#ffff00] rounded-[30px] flex-gap-10"
             >
               Delete
+            </button>
+             <button
+              onClick={() => handleAddBasketItem(plant._id)}
+              className="bg-[#9ed670] px-4 py-2 hover:bg-[#ffff00] rounded-[30px] gap-4"
+            >
+              Add to Basket
             </button>
           </div>
         </div>

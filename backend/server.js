@@ -15,6 +15,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 // app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/plant', require('./routes/plantRoutes'));
 app.use('/api/order', require('./routes/orderRoutes'));
+app.use('/api/basketItem', require('./routes/basketRoutes'))
 
 // Export the app object for testing
 if (require.main === module) {

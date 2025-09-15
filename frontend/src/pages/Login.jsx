@@ -20,9 +20,9 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
+    <div className="max-w-md mx-auto mt-20 ">
+      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded ">
+        <h1 className="mb-4 text-center text-[#8CB369] text-5xl font-['Satisfy']">Login</h1>
         <input
           type="email"
           placeholder="Email"
@@ -37,7 +37,7 @@ const Login = () => {
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         />
-        <button type="submit" className="w-full bg-green-800 text-white p-2 rounded hover:bg-lime-700">
+        <button type="submit" className="mx-auto block justify-center font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 hover:bg-[#ffff00] rounded-[30px]">
           Login
         </button>
       </form>

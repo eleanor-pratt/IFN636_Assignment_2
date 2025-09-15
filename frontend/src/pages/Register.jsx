@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
 
 const Register = () => {
+  <div className="py-6 px-6 w-full flex items-center justify-center bg-[#FFFDF1] min-h-screen "></div>
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
@@ -18,9 +19,9 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20">
+    <div className="max-w-md mx-auto mt-20 ">
       <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
-        <h1 className="text-2xl font-bold mb-4 text-center">Register</h1>
+        <h1 className="mb-4 text-center text-[#8CB369] text-5xl font-['Satisfy']">Registration</h1>
         <input
           type="text"
           placeholder="Name"
@@ -42,7 +43,7 @@ const Register = () => {
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         />
-        <button type="submit" className="w-full bg-green-800 text-white p-2 rounded hover:bg-lime-700">
+        <button type="submit" className="mx-auto block justify-center font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 rounded hover:bg-[#ffff00] rounded-[30px]">
           Register
         </button>
       </form>
