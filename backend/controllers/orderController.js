@@ -9,9 +9,9 @@ const getOrders = async (req,res) => {
 };
 
 const addOrder = async (req, res) => {
-const { orderNumber, description, completed, deliveryDate } = req.body;
+const { orderNumber, description, completed, orderDate } = req.body;
     try {
-        const order = await Order.create({ userId: req.user.id, orderNumber, description, completed, deliveryDate });
+        const order = await Order.create({ userId: req.user.id, orderNumber, description, completed, orderDate });
         res.status(201).json(order);
     } catch (error) {
         console.log(error)
@@ -20,7 +20,7 @@ const { orderNumber, description, completed, deliveryDate } = req.body;
 };
 
 const updateOrder = async (req,res) => {
-    const { orderNumber, description, completed, deliveryDate } = req.body;
+    const { orderNumber, description, completed, orderDate } = req.body;
     try {
         const order = await Order.findById(req.params.id);
         if (!order) return res.status(404).json({ message: 'Order not found' });
@@ -28,7 +28,7 @@ const updateOrder = async (req,res) => {
         order.orderNumber = orderNumber|| order.orderNumber;
         order.description = description || order.description;
         order.completed = completed ?? order.completed;
-        order.deliveryDate = deliveryDate || order.deliveryDate;
+        order.orderDate = orderDate || order.orderDate;
 
         const updatedOrder = await order.save();
         res.json(updatedOrder);

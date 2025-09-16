@@ -21,7 +21,7 @@ describe('AddOrder Function Test', () => {
     // Mock request data
     const req = {
       user: { id: new mongoose.Types.ObjectId() },
-      body: { orderNumber: 1, description: "Order description", completed: "Filled", deliveryDate: new Date() }
+      body: { orderNumber: 1, description: "Order description", completed: "Filled", orderDate: new Date() }
     };
 
     // Mock order that would be created
@@ -90,7 +90,7 @@ describe('Update Function Test', () => {
       orderNumber: 1,
       description: "Old description",
       completed: "Filled",
-      deliveryDate: new Date(),
+      orderDate: new Date(),
       save: sinon.stub().resolvesThis(), // Mock save method
     };
     // Stub Order.findById to return mock order
@@ -168,8 +168,8 @@ describe('GetOrder Function Test', () => {
 
     // Mock order data
     const orders = [
-      { _id: new mongoose.Types.ObjectId(), orderNumber: 1, description: "Order description 1", completed: "Filled", deliveryDate: new Date(), userId},
-      { _id: new mongoose.Types.ObjectId(), orderNumber: 2, description: "Order description 2", completed: "Not Filled", deliveryDate: new Date(), userId},
+      { _id: new mongoose.Types.ObjectId(), orderNumber: 1, description: "Order description 1", completed: "Filled", orderDate: new Date(), userId},
+      { _id: new mongoose.Types.ObjectId(), orderNumber: 2, description: "Order description 2", completed: "Not Filled", orderDate: new Date(), userId},
     ];
 
     // Stub Order.find to return mock orders
