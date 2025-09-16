@@ -43,7 +43,7 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
-      <h1 className="text-2xl font-bold mb-4">{editingOrder ? 'Add New Order' : 'Add New Order'}</h1>
+      <h1 className="mb-4 text-black text-3xl -bold font-['pacifico']">{editingOrder ? 'Add New Order' : 'Add New Order'}</h1>
       <input
         type="text"
         placeholder="Order Number"
@@ -77,7 +77,7 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
         className="w-64 mb-4 p-2 border rounded"
       />
       <div></div>
-      <button type="submit" className="w-20 bg-green-700 text-white p-2 rounded hover:bg-lime-700">
+      <button type="submit" className="font-normal font-['Roboto'] w-40 h-10 bg-[#75b550] text-black p-2 hover:bg-[#e8d174] rounded-[30px]">
         {editingOrder ? 'Update' : 'Add'}
       </button>
     </form>

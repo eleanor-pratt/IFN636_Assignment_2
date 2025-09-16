@@ -29,26 +29,26 @@ const PlantList = ({ plants, setPlants, setEditingPlant }) => {
     <div>
       {plants.map((plant) => (
         <div key={plant._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-lg font-bold text-[#2E6D17]">{plant.commonName}</h2>
+          <h2 className="text-xl font-bold text-[#2E6D17]">{plant.commonName}</h2>
           <p className="text text-gray-500 italic">{plant.botanicalName}</p>
           <p className="text">{plant.description}</p>
           <p className="text">Stock Count: {plant.stockCount}</p>
-          <div className="flex gap-x-2">
+          <div className="flex gap-x-2 mb-4 mt-4">
             <button
               onClick={() => setEditingPlant(plant)}
-              className="bg-[#75b550] px-4 py-2 hover:bg-[#ffff00] rounded-[30px] gap-4"
+              className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
             >
               Edit
             </button>
             <button
               onClick={() => handleDelete(plant._id)}
-              className="bg-[#ff4e50] px-4 py-2 hover:bg-[#ffff00] rounded-[30px] flex-gap-10"
+              className="bg-[#668a46] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
             >
               Delete
             </button>
              <button
               onClick={() => handleAddBasketItem(plant._id)}
-              className="bg-[#9ed670] px-4 py-2 hover:bg-[#ffff00] rounded-[30px] gap-4"
+              className="ml-auto font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 hover:bg-[#e8d174] rounded-[30px]"
             >
               Add to Basket
             </button>

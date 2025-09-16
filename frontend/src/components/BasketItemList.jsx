@@ -29,26 +29,30 @@ const BasketItemList = ({ items, setItems }) => {
   return (
     <div>
       {items.map((item) => (
-        <div key={item._id} className="bg-stone-100 p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-lg font-bold text-[#2E6D17]">{item.plant.commonName}</h2>
+        <div key={item._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-bold text-[#2E6D17]">{item.plant.commonName}</h2>
           <p className="text text-gray-500 italic">{item.plant.botanicalName}</p>
-          <p className="text ">Quantity: {item.quantity} <button
+          <p className="text ">Quantity: {item.quantity} 
+          <div className="flex items-center gap-4 mt-4">
+              <button
               onClick={() => handleUpdateQuantity(item._id, item.quantity - 1)}
-              className=" font-normal font-['Roboto'] bg-[#75b550] text-black p-2 hover:bg-[#ffff00] rounded-[30px]"
+              className="bg-[#ededea] p-2 hover:bg-[#e8d174]"
               >
               -
               </button>
+               <span className="text-lg font-semibold">{item.quantity}</span>
               <button
               onClick={() => handleUpdateQuantity(item._id, item.quantity + 1)}
-              className="font-normal font-['Roboto'] bg-[#75b550] text-black p-2 hover:bg-[#ffff00] rounded-[30px]"
+              className="bg-[#ededea] p-2 hover:bg-[#e8d174]"
               >
               +
               </button>
+              </div>
           </p>
-          <div className="mt-2">
+          <div className="flex">
             <button
               onClick={() => handleDelete(item._id)}
-              className="font-normal font-['Roboto'] bg-[#ff4e50] text-black p-2 hover:bg-[#ffff00] rounded-[30px]"
+              className="ml-auto mt-4 text-center bg-[#d6924d] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-40"
             >
               Remove
             </button>

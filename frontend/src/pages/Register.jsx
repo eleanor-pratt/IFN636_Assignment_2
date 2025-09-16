@@ -43,7 +43,7 @@ const Register = () => {
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         />
-        <button type="submit" className="mx-auto block justify-center font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 rounded hover:bg-[#ffff00] rounded-[30px]">
+        <button type="submit" className="mx-auto block justify-center font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 rounded hover:bg-[#e8d174] rounded-[30px]">
           Register
         </button>
       </form>
