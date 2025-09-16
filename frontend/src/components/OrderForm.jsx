@@ -4,7 +4,7 @@ import axiosInstance from '../axiosConfig';
 
 const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
   const { user } = useAuth();
-  const [formData, setFormData] = useState({orderNumber: '', completed: '', description: '', deliveryDate: '' });
+  const [formData, setFormData] = useState({orderNumber: '', completed: '', description: '', orderDate: '' });
 
   useEffect(() => {
     if (editingOrder) {
@@ -12,10 +12,10 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
         orderNumber: editingOrder.orderNumber,
         description: editingOrder.description,
         completed: editingOrder.completed,
-        deliveryDate: editingOrder.deliveryDate,
+        orderDate: editingOrder.orderDate,
       });
     } else {
-      setFormData({ orderNumber: '', completed: '', description: '', deliveryDate: '' });
+      setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
     }
   }, [editingOrder]);
 
@@ -34,7 +34,7 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
         setOrders([...orders, response.data]);
       }
       setEditingOrder(null);
-      setFormData({ orderNumber: '', completed: '', description: '', deliveryDate: '' });
+      setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
     } catch (error) {
       alert('Failed to save order.');
       console.log(error)
@@ -72,8 +72,8 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
       <input
         type="date"
         placeholder="Delivery Date"
-        value={formData.deliveryDate}
-        onChange={(e) => setFormData({ ...formData, deliveryDate: e.target.value })}
+        value={formData.orderDate}
+        onChange={(e) => setFormData({ ...formData, orderDate: e.target.value })}
         className="w-64 mb-4 p-2 border rounded"
       />
       <div></div>

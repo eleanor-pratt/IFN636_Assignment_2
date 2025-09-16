@@ -26,6 +26,20 @@ const BasketItemList = ({ items, setItems }) => {
     }
   }
 
+  const handleCheckout = async () => {
+    try {
+      await axiosInstance.post(`/api/checkout/`, {}, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      setItems([]);
+
+      alert('Order placed!')
+    } catch (error) {
+      alert('Failed to checkout.');
+    }
+  }
+
   return (
     <div>
       {items.map((item) => (
@@ -59,6 +73,12 @@ const BasketItemList = ({ items, setItems }) => {
           </div>
         </div>
       ))}
+      <button
+        onClick={() => handleCheckout()}
+        className="ml-auto mt-4 text-center bg-[#d6924d] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-40"
+      >
+        Checkout
+      </button>
     </div>
   );
 };

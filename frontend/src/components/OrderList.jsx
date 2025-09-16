@@ -18,11 +18,11 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
   return (
     <div>
       {orders.map((order) => (
-        <div key={order._id} className="bg-stone-100 p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-lg font-bold">{order.orderNumber}</h2>
-          <p className="text text-pink-700 italic">{order.completed}</p>
+        <div key={order._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
+          <h2 className="text-xl font-bold">{order.orderNumber}</h2>
+          <p className="text-xl font-bold text-[#2E6D17]">{order.completed}</p>
           <p className="text">{order.description}</p>
-          <p className="text">Delivery Date: {new Date(order.deliveryDate).toLocaleDateString("en-AU", {
+          <p className="text">Order Date: {new Date(order.orderDate).toLocaleDateString("en-AU", {
               weekday: "long",
               year: "numeric",
               month: "long",
@@ -30,16 +30,16 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
           })}
 
           </p>
-          <div className="mt-2">
+          <div className="flex gap-x-2 mb-4 mt-4">
             <button
               onClick={() => setEditingOrder(order)}
-              className="w-20 mr-2 bg-stone-500 text-white px-4 py-2 rounded hover:bg-lime-700"
+              className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
             >
               Edit
             </button>
             <button
               onClick={() => handleDelete(order._id)}
-              className="w-20 bg-pink-700 text-white px-4 py-2 rounded hover:bg-lime-700"
+              className="font-normal font-['Roboto'] bg-[#668a46] text-black p-2 hover:bg-[#e8d174] rounded-[30px] w-20"
             >
               Delete
             </button>
