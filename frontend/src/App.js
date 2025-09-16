@@ -6,6 +6,7 @@ import Profile from './pages/Profile';
 import Plants from './pages/Plants';
 import Orders from './pages/Orders';
 import Home from './pages/Home';
+import Basket from './pages/Basket';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/plants" element={<Plants />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/basket" element={<Basket />} />
       </Routes>
     </Router>
   );

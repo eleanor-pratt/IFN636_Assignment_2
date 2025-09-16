@@ -4,7 +4,7 @@ import axiosInstance from '../axiosConfig';
 
 const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
   const { user } = useAuth();
-  const [formData, setFormData] = useState({orderNumber: '', completed: '', description: '', deliveryDate: '' });
+  const [formData, setFormData] = useState({orderNumber: '', completed: '', description: '', orderDate: '' });
 
   useEffect(() => {
     if (editingOrder) {
@@ -12,10 +12,10 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
         orderNumber: editingOrder.orderNumber,
         description: editingOrder.description,
         completed: editingOrder.completed,
-        deliveryDate: editingOrder.deliveryDate,
+        orderDate: editingOrder.orderDate,
       });
     } else {
-      setFormData({ orderNumber: '', completed: '', description: '', deliveryDate: '' });
+      setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
     }
   }, [editingOrder]);
 
@@ -34,7 +34,7 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
         setOrders([...orders, response.data]);
       }
       setEditingOrder(null);
-      setFormData({ orderNumber: '', completed: '', description: '', deliveryDate: '' });
+      setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
     } catch (error) {
       alert('Failed to save order.');
       console.log(error)
@@ -43,7 +43,7 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
-      <h1 className="text-2xl font-bold mb-4">{editingOrder ? 'Add New Order' : 'Add New Order'}</h1>
+      <h1 className="mb-4 text-black text-3xl -bold font-['pacifico']">{editingOrder ? 'Add New Order' : 'Add New Order'}</h1>
       <input
         type="text"
         placeholder="Order Number"
@@ -72,12 +72,12 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
       <input
         type="date"
         placeholder="Delivery Date"
-        value={formData.deliveryDate}
-        onChange={(e) => setFormData({ ...formData, deliveryDate: e.target.value })}
+        value={formData.orderDate}
+        onChange={(e) => setFormData({ ...formData, orderDate: e.target.value })}
         className="w-64 mb-4 p-2 border rounded"
       />
       <div></div>
-      <button type="submit" className="w-20 bg-green-700 text-white p-2 rounded hover:bg-lime-700">
+      <button type="submit" className="font-normal font-['Roboto'] w-40 h-10 bg-[#75b550] text-black p-2 hover:bg-[#e8d174] rounded-[30px]">
         {editingOrder ? 'Update' : 'Add'}
       </button>
     </form>

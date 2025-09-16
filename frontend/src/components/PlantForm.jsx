@@ -44,7 +44,7 @@ const PlantForm = ({ plants, setPlants, editingPlant, setEditingPlant }) => {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
-      <h1 className="text-2xl font-bold mb-4">{editingPlant ? 'Add New Plant' : 'Add New Plant'}</h1>
+      <h1 className="mb-4 text-black text-3xl -bold font-['pacifico']">{editingPlant ? 'Edit Plant' : 'Add New Plant'}</h1>
       <input
         type="text"
         placeholder="Botanical Name"
@@ -85,7 +85,7 @@ const PlantForm = ({ plants, setPlants, editingPlant, setEditingPlant }) => {
         onChange={(e) => setFormData({ ...formData, stockCount: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
-      <button type="submit" className="w-20 bg-green-700 text-white p-2 rounded hover:bg-lime-700">
+      <button type="submit" className="font-normal font-['Roboto'] w-40 h-10 bg-[#75b550] text-black p-2 hover:bg-[#e8d174] rounded-[30px]">
         {editingPlant ? 'Update' : 'Add'}
       </button>
     </form>
