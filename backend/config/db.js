@@ -15,7 +15,7 @@ const connectDB = async () => {
       await User.create({
         name: "Admin",
         email: adminEmail,
-        password: "admin", // Will be hashed by pre-save hook
+        password: process.env.ADMIN_PASS, 
         role: 1,
       });
       console.log("Default admin user created");
