@@ -16,10 +16,16 @@ const Navbar = () => {
       <div>
         {user ? (
           <>
+            {user.role === 1 ? 
+            (
+              <>
+                <Link to="/users" className="mr-4">Users</Link>    
+              </>
+            ) : (<></>)}
             <Link to="/plants" className="mr-4">Plants</Link>
             <Link to="/orders" className="mr-4">Orders</Link>
-            <Link to="/profile" className="mr-4">Profile</Link>
             <Link to="/basket" className="mr-4">Basket</Link>
+            <Link to="/profile" className="mr-4">Profile</Link>
             <button
               onClick={handleLogout}
               className="bg-[#8CB369] px-4 py-2 rounded hover:bg-lime-500 rounded-[30px]"

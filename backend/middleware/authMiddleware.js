@@ -21,4 +21,12 @@ const protect = async (req, res, next) => {
     }
 };
 
-module.exports = { protect };
+const adminOnly = (req, res, next) => {
+  // ensure numeric comparison in case role is stored as Number
+  if (req.user && Number(req.user.role) === 1) {
+    return next();
+  }
+  return res.status(403).json({ message: 'Admins only' });
+};
+
+module.exports = { protect, adminOnly };
