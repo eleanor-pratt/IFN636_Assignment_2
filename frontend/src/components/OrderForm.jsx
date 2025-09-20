@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 
-const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
+const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder, onOrderChange }) => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({orderNumber: '', completed: '', description: '', orderDate: '' });
 
@@ -35,6 +35,11 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
       }
       setEditingOrder(null);
       setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
+      
+      // Refresh the orders list to maintain current sorting
+      if (onOrderChange) {
+        onOrderChange();
+      }
     } catch (error) {
       alert('Failed to save order.');
       console.log(error)
