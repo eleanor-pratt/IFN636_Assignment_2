@@ -33,6 +33,7 @@ const Users = () => {
       />
       <UserList
         users={users}
+        setUsers={setUsers}
         setEditingUser={setEditingUser}
       />
     </div>
