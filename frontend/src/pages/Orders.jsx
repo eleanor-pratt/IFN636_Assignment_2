@@ -12,9 +12,19 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axiosInstance.get('/api/order', {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
+        let response;
+        if (user.role === 1) {
+          response = await axiosInstance.get('/api/order/all', {
+            headers: { Authorization: `Bearer ${user.token}` },
+          });
+        } else {
+          response = await axiosInstance.get('/api/order/user', {
+            headers: { Authorization: `Bearer ${user.token}` },
+          });
+        }
+
+
+        
         setOrders(response.data);
       } catch (error) {
         alert(error);
