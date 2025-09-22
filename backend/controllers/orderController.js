@@ -1,7 +1,18 @@
 const Order = require('../models/Order');
+const SortContext = require('../sorting/SortContext');
+
 const getOrders = async (req,res) => {
     try {
-        const orders = await Order.find({ userId: req.user.id });
+        const { sort } = req.query;
+        let query = Order.find({ userId: req.user.id });
+        
+        // Apply sorting if sort parameter is provided
+        if (sort) {
+            const sortContext = SortContext.createFromRequest(sort);
+            query = sortContext.applyStrategy(query);
+        }
+        
+        const orders = await query;
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -42,7 +53,7 @@ const deleteOrder = async (req, res) => {
         const order = await Order.findById(req.params.id);
         if (!order) return res.status(404).json({ message: 'Order not found' });
         
-        await order.remove();
+        await Order.findByIdAndDelete(req.params.id);
         res.json({ message: 'Order deleted' });
     } catch (error) {
         res.status(500).json({ message: error.message });
