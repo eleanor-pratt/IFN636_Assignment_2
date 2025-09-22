@@ -34,18 +34,25 @@ const PlantList = ({ plants, setPlants, setEditingPlant }) => {
           <p className="text">{plant.description}</p>
           <p className="text">Stock Count: {plant.stockCount}</p>
           <div className="flex gap-x-2 mb-4 mt-4">
-            <button
-              onClick={() => setEditingPlant(plant)}
-              className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDelete(plant._id)}
-              className="bg-[#668a46] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
-            >
-              Delete
-            </button>
+
+            {user.role === 1 ? 
+              (
+                <>
+                  <button
+                    onClick={() => setEditingPlant(plant)}
+                    className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(plant._id)}
+                    className="bg-[#668a46] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
+                  >
+                    Delete
+                  </button>    
+                </>
+              ) : (<></>)}
+            
              <button
               onClick={() => handleAddBasketItem(plant._id)}
               className="ml-auto font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 hover:bg-[#e8d174] rounded-[30px]"

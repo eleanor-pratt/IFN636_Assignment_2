@@ -31,7 +31,11 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
 
           </p>
           <div className="flex gap-x-2 mb-4 mt-4">
-            <button
+
+          {user.role === 1 ? 
+            (
+              <>
+              <button
               onClick={() => setEditingOrder(order)}
               className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
             >
@@ -43,6 +47,9 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
             >
               Delete
             </button>
+              </>
+            ) : (<></>)}
+           
           </div>
         </div>
       ))}
