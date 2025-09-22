@@ -26,12 +26,17 @@ const Orders = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <OrderForm
+    {user.role === 1 ? 
+      (
+        <>
+        <OrderForm
         orders={orders}
         setOrders={setOrders}
         editingOrder={editingOrder}
         setEditingOrder={setEditingOrder}
-      />
+      />   
+        </>
+      ) : (<></>)}
       <OrderList orders={orders} setOrders={setOrders} setEditingOrder={setEditingOrder} />
     </div>
   );
