@@ -20,9 +20,10 @@ const Navbar = () => {
             (
               <>
                 <Link to="/users" className="mr-4">Users</Link> 
-                <Link to="/orders" className="mr-4">Orders</Link>   
+                   
               </>
             ) : (<></>)}
+            <Link to="/orders" className="mr-4">Orders</Link>
             <Link to="/plants" className="mr-4">Plants</Link>
             <Link to="/basket" className="mr-4">Basket</Link>
             <Link to="/profile" className="mr-4">Profile</Link>
