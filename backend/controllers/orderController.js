@@ -1,7 +1,7 @@
 const Order = require('../models/Order');
 const SortContext = require('../sorting/SortContext');
 
-const getOrders = async (req,res) => {
+const getOrderForUser = async (req,res) => {
     try {
         const { sort } = req.query;
         let query = Order.find({ userId: req.user.id });
@@ -13,6 +13,15 @@ const getOrders = async (req,res) => {
         }
         
         const orders = await query;
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getAllOrders = async (req,res) => {
+    try {
+        const orders = await Order.find({});
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -60,4 +69,4 @@ const deleteOrder = async (req, res) => {
     }
 };
 
-module.exports = { getOrders, addOrder, updateOrder, deleteOrder };
+module.exports = { getOrderForUser, addOrder, updateOrder, deleteOrder, getAllOrders };
