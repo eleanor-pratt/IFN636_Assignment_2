@@ -4,18 +4,17 @@ import axiosInstance from '../axiosConfig';
 
 const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
   const { user } = useAuth();
-  const [formData, setFormData] = useState({orderNumber: '', completed: '', description: '', orderDate: '' });
+  const [formData, setFormData] = useState({completed: '', description: '', orderDate: '' });
 
   useEffect(() => {
     if (editingOrder) {
       setFormData({
-        orderNumber: editingOrder.orderNumber,
         description: editingOrder.description,
         completed: editingOrder.completed,
         orderDate: editingOrder.orderDate,
       });
     } else {
-      setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
+      setFormData({completed: '', description: '', orderDate: '' });
     }
   }, [editingOrder]);
 
@@ -34,7 +33,7 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
         setOrders([...orders, response.data]);
       }
       setEditingOrder(null);
-      setFormData({ orderNumber: '', completed: '', description: '', orderDate: '' });
+      setFormData({completed: '', description: '', orderDate: '' });
     } catch (error) {
       alert('Failed to save order.');
       console.log(error)
@@ -44,13 +43,6 @@ const OrderForm = ({ orders, setOrders, editingOrder, setEditingOrder }) => {
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
       <h1 className="mb-4 text-black text-3xl -bold font-['pacifico']">{editingOrder ? 'Add New Order' : 'Add New Order'}</h1>
-      <input
-        type="text"
-        placeholder="Order Number"
-        value={formData.orderNumber}
-        onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
-        className="w-full mb-4 p-2 border rounded"
-      />
       <input
         type="text"
         placeholder="Description"

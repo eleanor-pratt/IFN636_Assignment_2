@@ -19,7 +19,6 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
     <div>
       {orders.map((order) => (
         <div key={order._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold">{order.orderNumber}</h2>
           <p className="text-xl font-bold text-[#2E6D17]">{order.completed}</p>
           <p className="text">{order.description}</p>
           <p className="text">Order Date: {new Date(order.orderDate).toLocaleDateString("en-AU", {
