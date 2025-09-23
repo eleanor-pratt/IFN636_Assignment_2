@@ -1,5 +1,3 @@
-// SortStrategy.js
-
 class SortStrategy {
     apply(query) {
         throw new Error("Sort method not implemented");
@@ -7,6 +5,3 @@ class SortStrategy {
 }
 
 module.exports = SortStrategy;
-
-
-

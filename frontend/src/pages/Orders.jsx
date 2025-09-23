@@ -67,9 +67,9 @@ const Orders = () => {
             <option value="date-desc">Date: Newest First</option>
             <option value="date-asc">Date: Oldest First</option>
           </optgroup>
-          <optgroup label="Sort by Order Number">
-            <option value="order-number-desc">Order Number: High to Low</option>
-            <option value="order-number-asc">Order Number: Low to High</option>
+          <optgroup label="Sort by Status">
+            <option value="completed-desc">Status: Not Filled</option>
+            <option value="completed-asc">Status: Filled</option>
           </optgroup>
         </select>
       </div>

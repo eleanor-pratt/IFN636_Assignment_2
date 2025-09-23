@@ -1,8 +1,7 @@
-// strategies/SortContext.js
 const DateAscStrategy = require("./DateAscStrategy");
 const DateDescStrategy = require("./DateDescStrategy");
-const OrderNumberAscStrategy = require("./OrderNumberAscStrategy");
-const OrderNumberDescStrategy = require("./OrderNumberDescStrategy");
+const CompletedDescStrategy = require("./CompletedDescStrategy");
+const CompletedAscStrategy = require("./CompletedAscStrategy");
 
 class SortContext {
   constructor(strategy) {
@@ -26,10 +25,10 @@ class SortContext {
         return new SortContext(new DateDescStrategy());
       case "date-asc":
         return new SortContext(new DateAscStrategy());
-      case "order-number-desc":
-        return new SortContext(new OrderNumberDescStrategy());
-      case "order-number-asc":
-        return new SortContext(new OrderNumberAscStrategy());
+      case "completed-desc":
+        return new SortContext(new CompletedDescStrategy());
+      case "completed-asc":
+        return new SortContext(new CompletedAscStrategy());
       case "desc":  // Backward compatibility
         return new SortContext(new DateDescStrategy());
       case "asc":   // Backward compatibility

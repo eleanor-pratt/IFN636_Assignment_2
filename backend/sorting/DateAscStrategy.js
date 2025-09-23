@@ -1,4 +1,3 @@
-// strategies/DateAscStrategy.js
 const SortStrategy = require("./SortStrategy");
 
 class DateAscStrategy extends SortStrategy {
