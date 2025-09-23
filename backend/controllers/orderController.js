@@ -21,7 +21,16 @@ const getOrderForUser = async (req,res) => {
 
 const getAllOrders = async (req,res) => {
     try {
-        const orders = await Order.find({});
+        const { sort } = req.query;
+        let query = Order.find({});
+        
+        // Apply sorting if sort parameter is provided
+        if (sort) {
+            const sortContext = SortContext.createFromRequest(sort);
+            query = sortContext.applyStrategy(query);
+        }
+
+        const orders = await query;
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
