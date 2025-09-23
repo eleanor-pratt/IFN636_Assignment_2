@@ -7,7 +7,7 @@ const connectDB = require('../config/db');
 const mongoose = require('mongoose');
 const sinon = require('sinon');
 const Order = require('../models/Order');
-const { updateOrder,getOrders,addOrder,deleteOrder } = require('../controllers/orderController');
+const { updateOrder,getAllOrders, getOrderForUser, addOrder,deleteOrder } = require('../controllers/orderController');
 const { expect } = chai;
 
 chai.use(chaiHttp);
@@ -21,11 +21,11 @@ describe('AddOrder Function Test', () => {
     // Mock request data
     const req = {
       user: { id: new mongoose.Types.ObjectId() },
-      body: { orderNumber: 1, description: "Order description", completed: "Filled", deliveryDate: new Date() }
+      body: {description: "Order description", completed: "Filled", orderDate: new Date() }
     };
 
     // Mock order that would be created
-    const createdOrder = { _id: new mongoose.Types.ObjectId(), ...req.body, userId: req.user.id };
+    const createdOrder = {_id: new mongoose.Types.ObjectId(), ...req.body, userId: req.user.id };
 
     // Stub Order.create to return the createdOrder
     const createStub = sinon.stub(Order, 'create').resolves(createdOrder);
@@ -38,8 +38,6 @@ describe('AddOrder Function Test', () => {
 
     // Call function
     await addOrder(req, res);
-
-    console.log('created ', createdOrder)
 
     // Assertions
     expect(createStub.calledOnceWith({ userId: req.user.id, ...req.body })).to.be.true;
@@ -87,19 +85,19 @@ describe('Update Function Test', () => {
     const orderId = new mongoose.Types.ObjectId();
     const existingOrder = {
       _id: orderId,
-      orderNumber: 1,
       description: "Old description",
       completed: "Filled",
-      deliveryDate: new Date(),
+      orderDate: new Date(),
       save: sinon.stub().resolvesThis(), // Mock save method
     };
     // Stub Order.findById to return mock order
     const findByIdStub = sinon.stub(Order, 'findById').resolves(existingOrder);
 
     // Mock request & response
+    const userId = new mongoose.Types.ObjectId();
     const req = {
-      params: { id: orderId },
-      body: { orderNumber: 2, description: "New description", completed: "Not Filled" }
+      params: { id: userId },
+      body: {description: "New description", completed: "Not Filled" }
     };
     const res = {
       json: sinon.spy(), 
@@ -110,7 +108,6 @@ describe('Update Function Test', () => {
     await updateOrder(req, res);
 
     // Assertions
-    expect(existingOrder.orderNumber).to.equal(2);
     expect(existingOrder.description).to.equal("New description");
     expect(existingOrder.completed).to.equal("Not Filled")
     expect(res.status.called).to.be.false; // No error status should be set
@@ -160,30 +157,29 @@ describe('Update Function Test', () => {
 
 });
 
-describe('GetOrder Function Test', () => {
-
-  it('should return orders', async () => {
+describe('GetOrderForUser Function Test', () => {
+  it('should return users orders', async () => {
     // Mock user ID
     const userId = new mongoose.Types.ObjectId();
 
     // Mock order data
     const orders = [
-      { _id: new mongoose.Types.ObjectId(), orderNumber: 1, description: "Order description 1", completed: "Filled", deliveryDate: new Date(), userId},
-      { _id: new mongoose.Types.ObjectId(), orderNumber: 2, description: "Order description 2", completed: "Not Filled", deliveryDate: new Date(), userId},
+      { _id: new mongoose.Types.ObjectId(), description: "Order description 1", completed: "Filled", orderDate: new Date(), userId},
+      { _id: new mongoose.Types.ObjectId(), description: "Order description 2", completed: "Not Filled", orderDate: new Date(), userId},
     ];
 
     // Stub Order.find to return mock orders
     const findStub = sinon.stub(Order, 'find').resolves(orders);
 
     // Mock request & response
-    const req = {user: { id: userId }};
+    const req = {user: { id: userId }, query: {}};
     const res = {
       json: sinon.spy(),
       status: sinon.stub().returnsThis()
     };
 
     // Call function
-    await getOrders(req, res);
+    await getOrderForUser(req, res);
 
     // Assertions
     expect(findStub.calledOnceWith({ userId })).to.be.true;
@@ -199,14 +195,14 @@ describe('GetOrder Function Test', () => {
     const findStub = sinon.stub(Order, 'find').throws(new Error('DB Error'));
 
     // Mock request & response
-    const req = { user: { id: new mongoose.Types.ObjectId() } };
+    const req = { user: { id: new mongoose.Types.ObjectId() }, query: {} };
     const res = {
       json: sinon.spy(),
       status: sinon.stub().returnsThis()
     };
 
     // Call function
-    await getOrders(req, res);
+    await getOrderForUser(req, res);
 
     // Assertions
     expect(res.status.calledWith(500)).to.be.true;
@@ -215,7 +211,63 @@ describe('GetOrder Function Test', () => {
     // Restore stubbed methods
     findStub.restore();
   });
+});
 
+describe('GetAllOrders Function Test', () => {
+
+  it('should return all orders', async () => {
+    // Mock user ID
+    const userId = new mongoose.Types.ObjectId();
+
+    // Mock order data
+    const orders = [
+      { _id: new mongoose.Types.ObjectId(), description: "Order description 1", completed: "Filled", orderDate: new Date(), userId},
+      { _id: new mongoose.Types.ObjectId(), description: "Order description 2", completed: "Not Filled", orderDate: new Date(), userId},
+    ];
+
+    // Stub Order.find to return mock orders
+    const findStub = sinon.stub(Order, 'find').resolves(orders);
+
+    // Mock request & response
+    const req = {user: { id: userId, role: 1 }, query: {}};
+    const res = {
+      json: sinon.spy(),
+      status: sinon.stub().returnsThis()
+    };
+
+    // Call function
+    await getAllOrders(req, res);
+
+    // Assertions
+    expect(findStub.calledOnceWith({})).to.be.true;
+    expect(res.json.calledWith(orders)).to.be.true;
+    expect(res.status.called).to.be.false; // No error status should be set
+
+    // Restore stubbed methods
+    findStub.restore();
+  });
+
+  it('should return 500 on error', async () => {
+    // Stub Order.find to throw an error
+    const findStub = sinon.stub(Order, 'find').throws(new Error('DB Error'));
+
+    // Mock request & response
+    const req = { user: { id: new mongoose.Types.ObjectId() }, query: {} };
+    const res = {
+      json: sinon.spy(),
+      status: sinon.stub().returnsThis()
+    };
+
+    // Call function
+    await getAllOrders(req, res);
+
+    // Assertions
+    expect(res.status.calledWith(500)).to.be.true;
+    expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
+
+    // Restore stubbed methods
+    findStub.restore();
+  });
 });
 
 describe('DeleteOrder Function Test', () => {

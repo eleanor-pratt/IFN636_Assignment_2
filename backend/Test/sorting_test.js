@@ -12,9 +12,9 @@ const SortContext = require('../sorting/SortContext');
 const SortStrategy = require('../sorting/SortStrategy');
 const DateAscStrategy = require('../sorting/DateAscStrategy');
 const DateDescStrategy = require('../sorting/DateDescStrategy');
-const OrderNumberAscStrategy = require('../sorting/OrderNumberAscStrategy');
-const OrderNumberDescStrategy = require('../sorting/OrderNumberDescStrategy');
-const { getOrders } = require('../controllers/orderController');
+const CompletedAscStrategy = require('../sorting/CompletedAscStrategy');
+const CompletedDescStrategy = require('../sorting/CompletedDescStrategy');
+const { getAllOrders, getOrderForUser } = require('../controllers/orderController');
 const Order = require('../models/Order');
 const { expect } = chai;
 
@@ -22,6 +22,7 @@ const { expect } = chai;
 afterEach(() => {
   sinon.restore();
 });
+
 
 describe('Sorting Feature Tests', () => {
 
@@ -54,22 +55,22 @@ describe('Sorting Feature Tests', () => {
       expect(mockQuery.sort.calledOnceWith({ orderDate: -1 })).to.be.true;
     });
 
-    it('should apply order number ascending sort correctly', () => {
-      const strategy = new OrderNumberAscStrategy();
+    it('should apply order filled to not filled sort correctly', () => {
+      const strategy = new CompletedAscStrategy();
       const mockQuery = { sort: sinon.stub().returnsThis() };
 
       strategy.apply(mockQuery);
 
-      expect(mockQuery.sort.calledOnceWith({ orderNumber: 1 })).to.be.true;
+      expect(mockQuery.sort.calledOnceWith({ completed: 1 })).to.be.true;
     });
 
-    it('should apply order number descending sort correctly', () => {
-      const strategy = new OrderNumberDescStrategy();
+    it('should apply order not filled to filled sort correctly', () => {
+      const strategy = new CompletedDescStrategy();
       const mockQuery = { sort: sinon.stub().returnsThis() };
 
       strategy.apply(mockQuery);
 
-      expect(mockQuery.sort.calledOnceWith({ orderNumber: -1 })).to.be.true;
+      expect(mockQuery.sort.calledOnceWith({ completed: -1 })).to.be.true;
     });
 
   });
@@ -79,8 +80,8 @@ describe('Sorting Feature Tests', () => {
     it('should create correct strategies for all sort parameters', () => {
       expect(SortContext.createFromRequest('date-desc').strategy).to.be.instanceOf(DateDescStrategy);
       expect(SortContext.createFromRequest('date-asc').strategy).to.be.instanceOf(DateAscStrategy);
-      expect(SortContext.createFromRequest('order-number-desc').strategy).to.be.instanceOf(OrderNumberDescStrategy);
-      expect(SortContext.createFromRequest('order-number-asc').strategy).to.be.instanceOf(OrderNumberAscStrategy);
+      expect(SortContext.createFromRequest('completed-desc').strategy).to.be.instanceOf(CompletedDescStrategy);
+      expect(SortContext.createFromRequest('completed-asc').strategy).to.be.instanceOf(CompletedAscStrategy);
       expect(SortContext.createFromRequest('unknown').strategy).to.be.instanceOf(DateAscStrategy); // default
     });
 
@@ -101,9 +102,9 @@ describe('Sorting Feature Tests', () => {
         status: sinon.stub().returnsThis()
       };
 
-      await getOrders(req, res);
+      await getAllOrders(req, res);
 
-      expect(findStub.calledOnceWith({ userId: req.user.id })).to.be.true;
+      expect(findStub.calledOnceWith({})).to.be.true;
       expect(sortStub.calledOnceWith({ orderDate: -1 })).to.be.true;
     });
 
@@ -120,9 +121,9 @@ describe('Sorting Feature Tests', () => {
         status: sinon.stub().returnsThis()
       };
 
-      await getOrders(req, res);
+      await getAllOrders(req, res);
 
-      expect(findStub.calledOnceWith({ userId: req.user.id })).to.be.true;
+      expect(findStub.calledOnceWith({ })).to.be.true;
       expect(sortStub.called).to.be.false;
     });
 
@@ -142,7 +143,7 @@ describe('Sorting Feature Tests', () => {
         status: sinon.stub().returnsThis()
       };
 
-      await getOrders(req, res);
+      await getAllOrders(req, res);
 
       expect(res.status.calledWith(500)).to.be.true;
       expect(res.json.calledWithMatch({ message: 'Database error' })).to.be.true;
