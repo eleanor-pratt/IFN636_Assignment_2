@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../axiosConfig';
 import OrderForm from '../components/OrderForm';
 import OrderList from '../components/OrderList';
@@ -10,33 +10,34 @@ const Orders = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [sortOrder, setSortOrder] = useState('date-desc'); // Default to date descending
 
-  const fetchOrders = async (sortParam = sortOrder) => {
+  const fetchOrders = useCallback(async (sortParam = sortOrder) => {
     if (!user || !user.token) {
       console.log('No user or token available');
       return;
     }
-    
+
     try {
-      console.log('Fetching orders with sort parameter:', sortParam);
-      const response = await axiosInstance.get(`/api/order?sort=${sortParam}`, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      });
-      console.log('Orders fetched successfully:', response.data);
+      let response;
+      if (user.role === 1) {
+        response = await axiosInstance.get(`/api/order/all?sort=${sortParam}`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+      } else {
+        response = await axiosInstance.get(`/api/order/user?sort=${sortParam}`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+      }
       setOrders(response.data);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
       console.error('Error response:', error.response?.data);
       alert('Failed to fetch orders: ' + (error.response?.data?.message || error.message));
     }
-  };
+  }, [user, sortOrder]);
 
   useEffect(() => {
-    console.log('useEffect triggered, user:', user);
-    if (user && user.token) {
-      console.log('User authenticated, fetching orders...');
-      fetchOrders();
-    }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    fetchOrders();
+  }, [user, fetchOrders]);
 
   const handleSortChange = (newSortOrder) => {
     console.log('Sort order changed to:', newSortOrder);
@@ -48,7 +49,7 @@ const Orders = () => {
     <div className="container mx-auto p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4">Orders</h1>
-        {user.role === 1 && (
+        {user && user.role === 1 && (
           <div className="flex items-center gap-4 mb-4">
             <label className="text-sm font-medium">Sort by:</label>
             <select
@@ -69,7 +70,7 @@ const Orders = () => {
         )}
       </div>
 
-      {user.role === 1 && (
+      {user && user.role === 1 && (
         <OrderForm
           orders={orders}
           setOrders={setOrders}
