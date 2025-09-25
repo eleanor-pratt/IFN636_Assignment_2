@@ -37,8 +37,8 @@ const updateUser = async (req, res) => {
     // - allow role=0 using nullish coalescing
     user.name = name || user.name;
     user.email = email || user.email;
-    if (typeof role !== 'undefined') user.role = role; // allow 0
-    if (password) user.password = password; // triggers pre('save') hash
+    if (typeof role !== 'undefined') user.role = role; 
+    if (password) user.password = password; 
 
     const updatedUser = await user.save();
     const obj = updatedUser.toObject();
@@ -54,7 +54,7 @@ const deleteUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    await user.remove(); // mirrors your plantController style
+    await user.remove(); 
     res.json({ message: 'User deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
