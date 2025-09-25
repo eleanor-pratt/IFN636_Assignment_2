@@ -1,4 +1,3 @@
-// controllers/userController.js
 const User = require('../models/User');
 
 const getUsers = async (req, res) => {
@@ -15,7 +14,6 @@ const addUser = async (req, res) => {
   const { name, email, password, role } = req.body;
   try {
     console.log(req.body);
-    // password will be hashed by the pre('save') hook
     const user = await User.create({ name, email, password, role });
     const obj = user.toObject();
     delete obj.password; // never return hashes
@@ -32,9 +30,6 @@ const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Mirror your plantController style, but:
-    // - only set password if provided so it re-hashes
-    // - allow role=0 using nullish coalescing
     user.name = name || user.name;
     user.email = email || user.email;
     if (typeof role !== 'undefined') user.role = role; 
