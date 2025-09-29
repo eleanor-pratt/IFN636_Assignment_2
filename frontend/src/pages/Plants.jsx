@@ -26,12 +26,17 @@ const Plants = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <PlantForm
-        plants={plants}
-        setPlants={setPlants}
-        editingPlant={editingPlant}
-        setEditingPlant={setEditingPlant}
-      />
+      {user.role === 1 ? 
+        (
+          <>
+            <PlantForm
+              plants={plants}
+              setPlants={setPlants}
+              editingPlant={editingPlant}
+              setEditingPlant={setEditingPlant}
+            />    
+          </>
+        ) : (<></>)}
       <PlantList plants={plants} setPlants={setPlants} setEditingPlant={setEditingPlant} />
     </div>
   );

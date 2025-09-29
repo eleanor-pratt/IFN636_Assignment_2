@@ -45,10 +45,10 @@ const updateBasketItem = async (req, res) => {
 const deleteBasketItem = async (req, res) => {
     try {
         const basketItem = await BasketItem.findById(req.params.id);
-        if (!basketItem) return res.status(404).json({ message: 'Plant not found' });
+        if (!basketItem) return res.status(404).json({ message: 'Basket item not found' });
         
         await basketItem.remove();
-        res.json({ message: 'Plant deleted' });
+        res.json({ message: 'Basket item deleted' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -19,7 +19,6 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
     <div>
       {orders.map((order) => (
         <div key={order._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold">{order.orderNumber}</h2>
           <p className="text-xl font-bold text-[#2E6D17]">{order.completed}</p>
           <p className="text">{order.description}</p>
           <p className="text">Order Date: {new Date(order.orderDate).toLocaleDateString("en-AU", {
@@ -31,7 +30,11 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
 
           </p>
           <div className="flex gap-x-2 mb-4 mt-4">
-            <button
+
+          {user.role === 1 ? 
+            (
+              <>
+              <button
               onClick={() => setEditingOrder(order)}
               className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
             >
@@ -43,6 +46,9 @@ const OrderList = ({ orders, setOrders, setEditingOrder }) => {
             >
               Delete
             </button>
+              </>
+            ) : (<></>)}
+           
           </div>
         </div>
       ))}
