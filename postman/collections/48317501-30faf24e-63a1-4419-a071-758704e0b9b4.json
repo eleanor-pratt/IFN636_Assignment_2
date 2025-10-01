@@ -1,0 +1,319 @@
+{
+	"info": {
+		"_postman_id": "48317501-30faf24e-63a1-4419-a071-758704e0b9b4",
+		"name": "Order Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get User Orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4501cf4a-f521-48da-a283-5ab5700f5753",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"pm.test(\"Under 500ms\", () => pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							"\r",
+							"const data = pm.response.json();\r",
+							"pm.test(\"Array returned\", () => pm.expect(data).to.be.an(\"array\"));\r",
+							"\r",
+							"if (data.length) {\r",
+							"  pm.test(\"Order shape\", () => {\r",
+							"    pm.expect(data[0]).to.have.property(\"_id\");\r",
+							"    pm.expect(data[0]).to.have.property(\"userId\");\r",
+							"    pm.expect(data[0]).to.have.property(\"description\");\r",
+							"    pm.expect(data[0]).to.have.property(\"completed\");\r",
+							"    pm.expect(data[0]).to.have.property(\"orderDate\");\r",
+							"  });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-bac7aa9f-af19-45e7-98a6-0a2d3bea6274",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/api/order/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"order",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "74af8ead-31f4-432a-a536-8a2c21076b9d",
+						"exec": [
+							"pm.test(\"201 Created\", () => pm.response.to.have.status(201));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.test(\"Created order shape\", () => {\r",
+							"  pm.expect(res).to.have.property(\"_id\");\r",
+							"  pm.expect(res).to.have.property(\"userId\");\r",
+							"  pm.expect(res).to.have.property(\"description\", pm.variables.get(\"desc\"));\r",
+							"  pm.expect(res).to.have.property(\"completed\", \"Not Filled\");\r",
+							"  pm.expect(res).to.have.property(\"orderDate\");\r",
+							"});\r",
+							"\r",
+							"// Save for later requests\r",
+							"pm.environment.set(\"order_id\", res._id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-f84c1e9f-613b-427e-b74a-908f434824f3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"description\": \"{{desc}}\",\r\n  \"completed\": \"Not Filled\",\r\n  \"orderDate\": \"{{nowISO}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/order/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3ad7a8b5-361c-4251-b5be-ddd1fda764b2",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.test(\"Updated fields applied\", () => {\r",
+							"  pm.expect(res).to.have.property(\"_id\", pm.environment.get(\"order_id\"));\r",
+							"  pm.expect(res).to.have.property(\"description\", \"Updated description\");\r",
+							"  pm.expect(res).to.have.property(\"completed\", \"Filled\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-8ebf356a-2f9c-475e-8585-323526b6ceda",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"description\": \"Updated description\",\r\n  \"completed\": \"Filled\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/order/{{order_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"order",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4c085dd-4870-45d0-9f04-63a3a7d31892",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);",
+							"",
+							"const res = pm.response.json();",
+							"pm.test(\"Deletion message\", () => pm.expect(res).to.deep.equal({ message: \"Order deleted\" }));",
+							"",
+							"// Try to delete again should 404",
+							"pm.sendRequest({",
+							"  url: \"http://localhost:5001/api/order/\" + pm.environment.get(\"order_id\"),",
+							"  method: \"DELETE\",",
+							"  header: { Authorization: \"Bearer \" + pm.environment.get(\"jwt_token\") }",
+							"}, (err, r) => {",
+							"  if (err) console.error(err);",
+							"  pm.test(\"Second delete returns 404\", () => pm.expect([404,410]).to.include(r.code));",
+							"});",
+							"",
+							"// Cleanup",
+							"pm.environment.unset(\"order_id\");",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-48d8b472-4463-4b1d-8431-c362b8856704",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/api/order/{{order_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"order",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "26dd8552-4e45-4f39-9e54-d55f0108f54d",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r",
+							"const data = pm.response.json();\r",
+							"pm.test(\"Array returned\", () => pm.expect(data).to.be.an(\"array\"));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-f6b6f126-c40e-4129-a6f0-b832a4354c01",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/api/order/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"order",
+						"all"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "34384f6a-6e48-4183-b2b7-8c28088e8f25",
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"pm.variables.set(\"nowISO\", new Date().toISOString());\r",
+					"pm.variables.set(\"desc\", `Order from Postman ${Date.now()}`);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f65f2749-6876-4d58-b6a7-4dbf03b1f729",
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
