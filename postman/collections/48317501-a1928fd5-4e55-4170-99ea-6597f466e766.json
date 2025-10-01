@@ -1,0 +1,274 @@
+{
+	"info": {
+		"_postman_id": "48317501-a1928fd5-4e55-4170-99ea-6597f466e766",
+		"name": "Basket",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Basket Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3711ffba-2a3b-4a54-923e-d48c369d0794",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"pm.test(\"Under 500ms\", () => pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							"\r",
+							"const data = pm.response.json();\r",
+							"pm.test(\"Returns array\", () => pm.expect(data).to.be.an(\"array\"));\r",
+							"\r",
+							"if (data.length) {\r",
+							"  pm.test(\"Basket item shape (populated plant)\", () => {\r",
+							"    pm.expect(data[0]).to.have.property(\"_id\");\r",
+							"    pm.expect(data[0]).to.have.property(\"userId\");\r",
+							"    pm.expect(data[0]).to.have.property(\"plant\");\r",
+							"    pm.expect(data[0].plant).to.be.an(\"object\");\r",
+							"    pm.expect(data[0]).to.have.property(\"quantity\");\r",
+							"  });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-4c2935cd-af0c-48ba-9c19-d655d125183a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/api/basketItem/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"basketItem",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Basket Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "47a4eeb9-cb49-40bb-94c7-34980e6e1076",
+						"exec": [
+							"pm.test(\"201 Created\", () => pm.response.to.have.status(201));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.test(\"Created basket item shape\", () => {\r",
+							"  pm.expect(res).to.have.property(\"_id\");\r",
+							"  pm.expect(res).to.have.property(\"userId\");\r",
+							"  pm.expect(res).to.have.property(\"plant\", pm.environment.get(\"plant_id\"));\r",
+							"  pm.expect(res).to.have.property(\"quantity\", Number(pm.variables.get(\"qty\")));\r",
+							"});\r",
+							"\r",
+							"// Save id for update/delete\r",
+							"pm.environment.set(\"basket_item_id\", res._id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-e2dfc341-8259-4b7f-b58c-66c0a549d5a4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"plant\": \"{{plant_id}}\",\r\n  \"quantity\": {{qty}}\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/basketItem/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"basketItem",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Basket",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9dcb13f0-8d67-45d0-9317-8fd9e40600dc",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.test(\"Updated fields applied\", () => {\r",
+							"  pm.expect(res).to.have.property(\"_id\", pm.environment.get(\"basket_id\"));\r",
+							"  pm.expect(res).to.have.property(\"plant_id\", pm.environment.get(\"plant_id\"));\r",
+							"  pm.expect(res).to.have.property(\"quantity\", 4);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-9d409a23-8d2a-4b6a-8714-607b475bf52a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"plant\": \"{{plant_id}}\",\r\n  \"quantity\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/basketItem/{{basket_item_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"basketItem",
+						"{{basket_item_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete BasketItem",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "176cc050-5e74-4d30-9bd0-828b299cddcf",
+						"exec": [
+							"pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r",
+							"pm.test(\"JSON\", () => pm.response.to.be.json);\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.test(\"Deletion message\", () => pm.expect(res).to.deep.equal({ message: \"Basket Item deleted\" }));\r",
+							"\r",
+							"// Try to delete again should 404\r",
+							"pm.sendRequest({\r",
+							"  url: \"http://localhost:5001/api/order/\" + pm.environment.get(\"basket_id\"),\r",
+							"  method: \"DELETE\",\r",
+							"  header: { Authorization: \"Bearer \" + pm.environment.get(\"jwt_token\") }\r",
+							"}, (err, r) => {\r",
+							"  if (err) console.error(err);\r",
+							"  pm.test(\"Second delete returns 404\", () => pm.expect([404,410]).to.include(r.code));\r",
+							"});\r",
+							"\r",
+							"// Cleanup\r",
+							"pm.environment.unset(\"basket_id\");"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-5fea26f9-1a59-4a42-8791-0f2cb80bb9c4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/api/basketItem/{{basket_item_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"basketItem",
+						"{{basket_item_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2dcf23e6-35d6-438e-a2fe-0a86bde5deda",
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"pm.variables.set(\"qty\", 2);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7a91a4c4-fce9-470b-932b-bc57f5681ed2",
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
