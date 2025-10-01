@@ -1,21 +1,21 @@
 
 
 ## Public URL of Project: 
-Live version of dashboard can be accessed at: http://3.107.196.202
+Live version of dashboard can be accessed at: http://3.106.55.253
 
 Project-specific username and password if we need to access your dashboard:
 
-Use the default credentials: 
+Use the default administrative credentials: 
 
-username: username@user.com
+username: admin@plantnursery.com
 
-password: password
+password: securepassword
 
 
 
-## Jira Dashboard Access:
+## Figma Access:
 
-https://connect-team-zxr8tiyz.atlassian.net/jira/software/projects/EP/boards/34/backlog 
+[https://connect-team-zxr8tiyz.atlassian.net/jira/software/projects/EP/boards/34/backlog ](https://www.figma.com/design/svS76Rpm9xJzs41ZSjg7Kv/Plant-E-Commerce-Solution?node-id=1-2&t=JR95phRyfdALLKT3-1)
 
 
 ## Project Setup
@@ -35,6 +35,7 @@ Create a file called `.env` in the backend directory with the following contents
 MONGO_URI=xxx
 JWT_SECRET=xxx
 PORT=xxx
+ADMIN_PASS=xxx
 ```
 
 ### Run in development mode
