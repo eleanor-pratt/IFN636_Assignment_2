@@ -8,9 +8,11 @@ import Plants from './pages/Plants';
 import Orders from './pages/Orders';
 import Basket from './pages/Basket';
 import Profile from './pages/Profile';
+import { ThemeProvider } from './theme/ThemeProvider';
 
 function App() {
   return (
+    <ThemeProvider>
     <Router>
       <Navbar />
       <Routes>
@@ -24,6 +26,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
+    </ThemeProvider>
   );
 }
 
