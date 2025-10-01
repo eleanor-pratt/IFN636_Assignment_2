@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "48802516-a5a8ee15-f513-412b-826e-f2a82ad0d675",
+		"name": "User Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3657c7cd-668e-4c1d-9f72-9cadd20a98c9",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time < 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"const data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Returns an array\", function () {\r",
+							"  pm.expect(data).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Users do not include password field\", function () {\r",
+							"  if (Array.isArray(data) && data.length) {\r",
+							"    pm.expect(data[0]).to.not.have.property(\"password\");\r",
+							"  }\r",
+							"});\r",
+							"\r",
+							"// Optional: schema-ish checks on first item\r",
+							"pm.test(\"User object has expected keys\", function () {\r",
+							"  if (Array.isArray(data) && data.length) {\r",
+							"    pm.expect(data[0]).to.have.property(\"_id\");\r",
+							"    pm.expect(data[0]).to.have.property(\"name\");\r",
+							"    pm.expect(data[0]).to.have.property(\"email\");\r",
+							"    pm.expect(data[0]).to.have.property(\"role\");\r",
+							"  }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48802516-c2665785-f402-4ff0-9f46-0f5ffff616d0",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b42aae25-2b1b-45e7-ace0-1a55e5fa6ec7",
+						"exec": [
+							"const res = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time < 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Created user has expected fields (no password)\", function () {\r",
+							"  pm.expect(res).to.be.an(\"object\");\r",
+							"  pm.expect(res).to.have.property(\"_id\");\r",
+							"  pm.expect(res).to.have.property(\"name\");\r",
+							"  pm.expect(res).to.have.property(\"email\");\r",
+							"  pm.expect(res).to.have.property(\"role\");\r",
+							"  pm.expect(res).to.not.have.property(\"password\");\r",
+							"});\r",
+							"\r",
+							"// Save id for update/delete\r",
+							"if (res && res._id) {\r",
+							"  pm.environment.set(\"user_id\", res._id);\r",
+							"  console.log(\"user_id saved:\", res._id);\r",
+							"} else {\r",
+							"  console.warn(\"No _id found on create response\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48802516-0a37f977-75c9-4a87-80da-621c9be74f37",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Postman Test User\",\r\n    \"email\": \"postman.user+{{$timestamp}}@example.com\",\r\n    \"password\": \"test_password\",\r\n    \"role\": 1\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a96f714b-b1bf-40b8-980e-d4fc811c2f39",
+						"exec": [
+							"const res = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time < 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Updated fields applied and password not present\", function () {\r",
+							"  pm.expect(res).to.be.an(\"object\");\r",
+							"  pm.expect(res).to.have.property(\"_id\");\r",
+							"  pm.expect(res).to.have.property(\"name\", \"Postman User Updated\");\r",
+							"  pm.expect(res).to.have.property(\"role\", 0);\r",
+							"  pm.expect(res).to.not.have.property(\"password\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48802516-3dda8bec-a4ea-4537-b69a-1067c65fc0ed",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Postman User Updated\",\r\n  \"role\": 0\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/user/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7818b996-4748-415d-b872-ca5e5b0ff1fb",
+						"exec": [
+							"const res = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time < 500ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Deletion message returned\", function () {\r",
+							"  pm.expect(res).to.have.property(\"message\", \"User deleted\");\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"  url: pm.environment.get(\"base_url\") + \"/user/\" + pm.environment.get(\"user_id\"),\r",
+							"  method: \"DELETE\",\r",
+							"  header: { \"Authorization\": \"Bearer \" + pm.environment.get(\"jwt_token\") }\r",
+							"}, function (err, resp) {\r",
+							"  if (err) return console.error(err);\r",
+							"  pm.test(\"Second delete returns 404\", function () {\r",
+							"    pm.expect(resp.code).to.equal(404);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"// Clean up user_id\r",
+							"pm.environment.unset(\"user_id\");\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48802516-20c313cd-8cb6-4208-bc33-11bfd25bdf68",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/api/user/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c4ddc690-7d64-4fae-91e2-21f1f71280e6",
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"// Fail fast if token missing on protected routes\r",
+					"if (!pm.environment.get(\"jwt_token\")) {\r",
+					"  console.warn(\"No jwt_token in environment. Login first.\");\r",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f00fbb97-404e-43b5-aed7-1ca305a931e0",
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
