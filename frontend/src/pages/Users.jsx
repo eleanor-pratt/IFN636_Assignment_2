@@ -24,18 +24,33 @@ const Users = () => {
   }, [user]);
 
   return (
-    <div className="container mx-auto p-6">
-      <UserForm
-        users={users}
-        setUsers={setUsers}
-        editingUser={editingUser}
-        setEditingUser={setEditingUser}
-      />
-      <UserList
-        users={users}
-        setUsers={setUsers}
-        setEditingUser={setEditingUser}
-      />
+    <div className="min-h-screen bg-[#FFFDF1] dark:bg-slate-900 py-8">
+      <div className="container mx-auto px-6 space-y-8">
+
+        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-slate-900 dark:text-white">
+            Manage Users
+          </h2>
+          <UserForm
+            users={users}
+            setUsers={setUsers}
+            editingUser={editingUser}
+            setEditingUser={setEditingUser}
+          />
+        </section>
+
+        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-slate-900 dark:text-white">
+            All Users
+          </h2>
+          <UserList
+            users={users}
+            setUsers={setUsers}
+            setEditingUser={setEditingUser}
+          />
+        </section>
+
+      </div>
     </div>
   );
 };

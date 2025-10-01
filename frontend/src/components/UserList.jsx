@@ -18,24 +18,54 @@ const UserList = ({ users, setUsers, setEditingUser }) => {
 
   const roleLabel = (role) => (role === 1 ? 'Admin' : 'User');
 
-  return (
-    <div>
-      {users.map((u) => (
-        <div key={u._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold text-[#2E6D17]">{u.name}</h2>
-          <p className="text text-gray-500 italic">{u.email}</p>
-          <p className="text">Role: {roleLabel(u.role)}</p>
+  if (!users?.length) {
+    return (
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-6
+                      bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300">
+        No users found.
+      </div>
+    );
+  }
 
-          <div className="flex gap-x-2 mb-4 mt-4">
+  return (
+    <div className="space-y-4">
+      {users.map((u) => (
+        <div
+          key={u._id}
+          className="p-4 rounded-xl shadow
+                     bg-white dark:bg-slate-900
+                     border border-slate-200 dark:border-slate-700"
+        >
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            {u.name}
+          </h2>
+          <p className="italic text-slate-600 dark:text-slate-400">{u.email}</p>
+          <p className="mt-1 text-slate-700 dark:text-slate-300">
+            Role:{' '}
+            <span
+              className={`${
+                u.role === 1
+                  ? 'text-lime-700 dark:text-lime-400'
+                  : 'text-slate-700 dark:text-slate-300'
+              } font-medium`}
+            >
+              {roleLabel(u.role)}
+            </span>
+          </p>
+
+          <div className="flex gap-x-2 mt-4">
             <button
               onClick={() => setEditingUser(u)}
-              className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
+              className="px-4 py-2 rounded-[30px] w-24 text-sm
+                         bg-[#8CB369] text-black hover:bg-[#e8d174]
+                         dark:text-white dark:hover:bg-[#a3c96e]"
             >
               Edit
             </button>
             <button
               onClick={() => handleDelete(u._id)}
-              className="bg-[#668a46] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
+              className="px-4 py-2 rounded-[30px] w-24 text-sm
+                         bg-red-600 text-white hover:bg-red-700"
             >
               Delete
             </button>

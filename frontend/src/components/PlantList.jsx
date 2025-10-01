@@ -17,7 +17,7 @@ const PlantList = ({ plants, setPlants, setEditingPlant }) => {
 
   const handleAddBasketItem = async (plantId) => {
     try {
-      await axiosInstance.post(`/api/basketItem`, {plant: plantId, quantity: 1}, {
+      await axiosInstance.post(`/api/basketItem`, { plant: plantId, quantity: 1 }, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
     } catch (error) {
@@ -25,37 +25,75 @@ const PlantList = ({ plants, setPlants, setEditingPlant }) => {
     }
   };
 
-  return (
-    <div>
-      {plants.map((plant) => (
-        <div key={plant._id} className="bg-[#f9f9f7] p-4 mb-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold text-[#2E6D17]">{plant.commonName}</h2>
-          <p className="text text-gray-500 italic">{plant.botanicalName}</p>
-          <p className="text">{plant.description}</p>
-          <p className="text">Stock Count: {plant.stockCount}</p>
-          <div className="flex gap-x-2 mb-4 mt-4">
+  if (!plants?.length) {
+    return (
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-6
+                      bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300">
+        No plants yet.
+      </div>
+    );
+  }
 
-            {user.role === 1 ? 
-              (
-                <>
-                  <button
-                    onClick={() => setEditingPlant(plant)}
-                    className="bg-[#8CB369] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(plant._id)}
-                    className="bg-[#668a46] px-4 py-2 hover:bg-[#e8d174] rounded-[30px] w-20"
-                  >
-                    Delete
-                  </button>    
-                </>
-              ) : (<></>)}
-            
-             <button
+  return (
+    <div className="space-y-4">
+      {plants.map((plant) => (
+        <div
+          key={plant._id}
+          className="p-4 rounded-xl shadow
+                     bg-white dark:bg-slate-900
+                     border border-slate-200 dark:border-slate-700"
+        >
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+            {plant.commonName}
+          </h2>
+
+          <p className="italic mt-0.5 text-slate-600 dark:text-slate-400">
+            {plant.botanicalName}
+          </p>
+
+          {plant.description && (
+            <p className="mt-2 text-slate-700 dark:text-slate-300">
+              {plant.description}
+            </p>
+          )}
+
+          <div className="mt-3 flex items-center gap-2">
+            <span
+              className="inline-flex items-center rounded-full px-3 py-1 text-sm
+                         bg-lime-100 text-lime-800
+                         dark:bg-lime-900/40 dark:text-lime-300"
+            >
+              Stock: {plant.stockCount}
+            </span>
+          </div>
+
+          <div className="flex gap-x-2 mt-4">
+            {user.role === 1 && (
+              <>
+                <button
+                  onClick={() => setEditingPlant(plant)}
+                  className="px-4 py-2 rounded-[30px] w-24 text-sm
+                             bg-[#8CB369] text-black hover:bg-[#e8d174]
+                             dark:text-white dark:hover:bg-[#a3c96e]"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => handleDelete(plant._id)}
+                  className="px-4 py-2 rounded-[30px] w-24 text-sm
+                             bg-red-600 text-white hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </>
+            )}
+
+            <button
               onClick={() => handleAddBasketItem(plant._id)}
-              className="ml-auto font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 hover:bg-[#e8d174] rounded-[30px]"
+              className="ml-auto font-normal font-['Roboto'] w-40 h-10 rounded-[30px]
+                         bg-[#8CB369] text-black hover:bg-[#e8d174]
+                         dark:text-white dark:hover:bg-[#a3c96e]"
             >
               Add to Basket
             </button>

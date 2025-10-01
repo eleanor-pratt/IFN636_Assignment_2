@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 
 const Profile = () => {
-  const { user } = useAuth(); // Access user token from context
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,20 +11,20 @@ const Profile = () => {
     address: '',
   });
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    // Fetch profile data from the backend
     const fetchProfile = async () => {
       setLoading(true);
       try {
-        const response = await axiosInstance.get('/api/auth/profile', {
+        const { data } = await axiosInstance.get('/api/auth/profile', {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setFormData({
-          name: response.data.name,
-          email: response.data.email,
-          university: response.data.university || '',
-          address: response.data.address || '',
+          name: data.name ?? '',
+          email: data.email ?? '',
+          university: data.university ?? '',
+          address: data.address ?? '',
         });
       } catch (error) {
         alert('Failed to fetch profile. Please try again.');
@@ -32,13 +32,12 @@ const Profile = () => {
         setLoading(false);
       }
     };
-
-    if (user) fetchProfile();
+    if (user?.token) fetchProfile();
   }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
     try {
       await axiosInstance.put('/api/auth/profile', formData, {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -47,50 +46,104 @@ const Profile = () => {
     } catch (error) {
       alert('Failed to update profile. Please try again.');
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
-  if (loading) {
-    return <div className="text-center mt-20">Loading...</div>;
-  }
-
   return (
-    <div className="max-w-md mx-auto mt-20">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
-        <h1 className="mb-4 text-center text-[#8CB369] text-5xl font-['Satisfy']">Your Profile</h1>
-        <input
-          type="text"
-          placeholder="Name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full mb-4 p-2 border rounded"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="w-full mb-4 p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="University"
-          value={formData.university}
-          onChange={(e) => setFormData({ ...formData, university: e.target.value })}
-          className="w-full mb-4 p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Address"
-          value={formData.address}
-          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          className="w-full mb-4 p-2 border rounded"
-        />
-        <button type="submit" className="mx-auto block justify-center font-normal font-['Roboto'] w-40 h-10 bg-[#8CB369] text-black p-2 rounded hover:bg-[#e8d174] rounded-[30px]">
-          {loading ? 'Updating...' : 'Update Profile'}
-        </button>
-      </form>
+    <div className="min-h-screen bg-[#FFFDF1] dark:bg-slate-900 py-10 px-4">
+      <div className="max-w-md mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-md rounded-xl p-6"
+        >
+          <h1 className="mb-6 text-center text-[#8CB369] text-5xl font-['Satisfy']">
+            Your Profile
+          </h1>
+
+          {loading ? (
+            <div className="space-y-4">
+              <div className="h-10 rounded bg-slate-100 dark:bg-slate-800 animate-pulse" />
+              <div className="h-10 rounded bg-slate-100 dark:bg-slate-800 animate-pulse" />
+              <div className="h-10 rounded bg-slate-100 dark:bg-slate-800 animate-pulse" />
+              <div className="h-10 rounded bg-slate-100 dark:bg-slate-800 animate-pulse" />
+            </div>
+          ) : (
+            <>
+              <label className="block text-sm mb-1 text-slate-700 dark:text-slate-300">
+                Name
+              </label>
+              <input
+                type="text"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full mb-4 p-2 rounded border
+                           bg-white dark:bg-slate-800
+                           border-slate-300 dark:border-slate-600
+                           text-slate-900 dark:text-white
+                           placeholder-slate-500 dark:placeholder-slate-400"
+              />
+
+              <label className="block text-sm mb-1 text-slate-700 dark:text-slate-300">
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full mb-4 p-2 rounded border
+                           bg-white dark:bg-slate-800
+                           border-slate-300 dark:border-slate-600
+                           text-slate-900 dark:text-white
+                           placeholder-slate-500 dark:placeholder-slate-400"
+              />
+
+              <label className="block text-sm mb-1 text-slate-700 dark:text-slate-300">
+                University
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., QUT"
+                value={formData.university}
+                onChange={(e) => setFormData({ ...formData, university: e.target.value })}
+                className="w-full mb-4 p-2 rounded border
+                           bg-white dark:bg-slate-800
+                           border-slate-300 dark:border-slate-600
+                           text-slate-900 dark:text-white
+                           placeholder-slate-500 dark:placeholder-slate-400"
+              />
+
+              <label className="block text-sm mb-1 text-slate-700 dark:text-slate-300">
+                Address
+              </label>
+              <input
+                type="text"
+                placeholder="Street, City, Postcode"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                className="w-full mb-6 p-2 rounded border
+                           bg-white dark:bg-slate-800
+                           border-slate-300 dark:border-slate-600
+                           text-slate-900 dark:text-white
+                           placeholder-slate-500 dark:placeholder-slate-400"
+              />
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="mx-auto block w-44 h-10 rounded-[30px] font-['Roboto']
+                           bg-[#8CB369] text-black hover:bg-[#e8d174]
+                           dark:text-white dark:hover:bg-[#a3c96e]
+                           disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {saving ? 'Updating...' : 'Update Profile'}
+              </button>
+            </>
+          )}
+        </form>
+      </div>
     </div>
   );
 };
