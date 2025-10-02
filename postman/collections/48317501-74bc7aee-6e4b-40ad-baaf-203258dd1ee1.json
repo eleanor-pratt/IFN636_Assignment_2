@@ -260,8 +260,7 @@
 					"query": [
 						{
 							"key": "",
-							"value": null,
-							"type": "text"
+							"value": null
 						}
 					]
 				}
