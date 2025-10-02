@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "48317501-e3ecf5e3-b3e2-4a1a-80f6-92937c486786",
+		"name": "Authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b36db811-25d3-4857-81d8-e0cdc4d68b95",
+						"exec": [
+							"let response = pm.response.json();",
+							"// Basic test",
+							"pm.test(\"Status code is 201 (Created)\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"// Save JWT if returned",
+							"if (response.token) {",
+							"    pm.environment.set(\"jwt_token\", response.token);",
+							"    console.log(\"JWT Token saved from registration response\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-2c6d98b2-c8df-4ccc-a696-7ddd6be30533",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Frances\",\n    \"email\": \"frances@plant.com\",\n    \"password\": \"plant123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "928d439b-5952-4680-852d-68fe8d587c8a",
+						"exec": [
+							"// Parse the response body",
+							"let response = pm.response.json();",
+							"",
+							"// Basic test: status code should be 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"// Save JWT token to environment variable (adjust key as needed)",
+							"if (response.token) {",
+							"    pm.environment.set(\"jwt_token\", response.token);",
+							"    console.log(\"JWT Token saved to environment\");",
+							"} else {",
+							"    console.warn(\"No token found in response!\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "48317501-13d5e9e3-6ff2-4974-af73-0d37051f9858",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"admin@plantnursery.com\",\n    \"password\": \"securepassword\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5001/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
