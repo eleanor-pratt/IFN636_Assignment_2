@@ -216,7 +216,7 @@ describe('GetPlant Function Test', () => {
 
 });
 
-describe('DeletePlant Function Test', () => {
+describe('deletePlant Function Test', () => {
 
   it('should delete a plant successfully', async () => {
     // Mock request data
